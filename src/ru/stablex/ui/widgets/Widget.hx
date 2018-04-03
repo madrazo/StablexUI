@@ -477,6 +477,16 @@ class Widget extends TweenSprite{
     * Remove child from display list
     *
     */
+    #if cppia
+    override public function overrideRemoveChild(child:DisplayObject) : DisplayObject {
+        if( Std.is(child, Widget) ){
+            this.overrideRemoveEventListener(WidgetEvent.RESIZE, cast(child, Widget)._onParentResize);
+            this.overrideRemoveEventListener(WidgetEvent.INITIAL_RESIZE, cast(child, Widget)._onParentResize);
+            UIBuilder.dispatcher.dispatchEvent(new WidgetEvent( WidgetEvent.REMOVED, cast child ));
+        }
+        return super.overrideRemoveChild(child);
+    }//function removeChild()
+    #else
     override public function removeChild(child:DisplayObject) : DisplayObject {
         if( Std.is(child, Widget) ){
             this.removeEventListener(WidgetEvent.RESIZE, cast(child, Widget)._onParentResize);
@@ -485,6 +495,7 @@ class Widget extends TweenSprite{
         }
         return super.removeChild(child);
     }//function removeChild()
+    #end
 
 
     /**

@@ -246,5 +246,10 @@ class TweenSprite extends Sprite{
         }
     }//function freeChildren()
 
+    #if cppia
+    public function overrideRemoveChild(child:DisplayObject) : DisplayObject {
+        return removeChild(child);
+    }
+    #end
 
 }//class TweenSprite

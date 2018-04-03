@@ -551,8 +551,16 @@ class Box extends Widget{
     * Remove child
     *
     */
+    #if cppia
+    override public function overrideRemoveChild (child:DisplayObject) : DisplayObject {
+    #else
     override public function removeChild (child:DisplayObject) : DisplayObject {
+    #end
+        #if cppia
+        super.overrideRemoveChild(child);
+        #else
         super.removeChild(child);
+        #end
         child.removeEventListener(WidgetEvent.RESIZE, this._onChildResize);
         if( !this.destroyed ){
             this._onChildResize();
