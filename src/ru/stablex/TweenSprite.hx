@@ -36,7 +36,11 @@ class TweenSprite extends Sprite{
     * Equal to <type>flash.display.Sprite</type>.addEventListener except this ignores `useCapture` and does not support weak references.
     *
     */
+#if cppia
+    public function overrideAddEventListener (type:String, listener:Dynamic->Void, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false) : Void{
+#else
     override public function addEventListener (type:String, listener:Dynamic->Void, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false) : Void{
+#end
         //if listeners list is not created
         if( this._listeners == null ){
             #if haxe3
@@ -59,7 +63,11 @@ class TweenSprite extends Sprite{
             listeners.add(listener);
         }
 
+#if cppia
+        addEventListener(type, listener, false, priority, useWeakReference);
+#else
         super.addEventListener(type, listener, false, priority, useWeakReference);
+#end
     }//function addEventListener()
 
 
@@ -74,7 +82,11 @@ class TweenSprite extends Sprite{
             return false;
         }
 
+#if cppia
+        overrideAddEventListener(type, listener, useCapture, priority, useWeakReference);
+#else
         this.addEventListener(type, listener, useCapture, priority, useWeakReference);
+#end
         return true;
     }//function addEventListener()
 
@@ -83,13 +95,21 @@ class TweenSprite extends Sprite{
     * Equal to <type>flash.display.Sprite</type>.removeEventListener except this ignores `useCapture`
     *
     */
+#if cppia
+     public function overrideRemoveEventListener (type:String, listener:Dynamic->Void, useCapture:Bool = false) : Void{
+#else
     override public function removeEventListener (type:String, listener:Dynamic->Void, useCapture:Bool = false) : Void{
+#end
         //remove listener from the list of registered listeners
         if( this._listeners != null ){
             if( this._listeners.exists(type) ) this._listeners.get(type).remove(listener);
         }
 
+#if cppia
+        removeEventListener(type, listener, false);
+#else
         super.removeEventListener(type, listener, false);
+#end
     }//function removeEventListener()
 
 
@@ -102,7 +122,11 @@ class TweenSprite extends Sprite{
             var listeners : List<Dynamic->Void> = this._listeners.get(type);
             if( listeners != null ){
                 while( listeners.length > 0 ){
+#if cppia
+                    overrideRemoveEventListener(type, listeners.first());
+#else
                     this.removeEventListener(type, listeners.first());
+#end
                 }
             }
         }
@@ -189,7 +213,11 @@ class TweenSprite extends Sprite{
             for(event in this._listeners.keys()){
                 var listeners : List<Dynamic->Void> = this._listeners.get(event);
                 while( !listeners.isEmpty() ){
+#if cppia
+                    overrideRemoveEventListener(event, listeners.first());
+#else
                     this.removeEventListener(event, listeners.first());
+#end
                 }
             }
         }
